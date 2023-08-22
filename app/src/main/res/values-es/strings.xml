@@ -1,12 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">PlantsCommerce</string>
-    <string name="sign_in">Sign In</string>
+    <string name="sign_in">Inicio de sesión</string>
     <string name="plants">Plantas</string>
     <string name="shopping_cart">Carrito</string>
     <string name="profile">Perfil</string>
     <string name="password_label">Password</string>
     <string name="email_label">Email</string>
-    <string name="email_example_placeholder">example@example.com</string>
     <string name="password_placeholder">Password</string>
     <string name="signing_in">Iniciando sesión</string>
     <string name="not_have_an_account_label">You do not have an account?</string>

@@ -53,7 +53,7 @@ val Typography = Typography(
         letterSpacing = 0.sp
     ),
     headlineMedium = TextStyle(
-        fontFamily = ibmPlexSansFamily,
+        fontFamily = ibmPlexSerifFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 28.sp,
         lineHeight = 36.sp,

@@ -9,16 +9,16 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
-import com.fernanortega.plantscommerce.presentation.ui.navigation.Routes
-import com.fernanortega.plantscommerce.presentation.ui.navigation.authNavGraph
+import com.fernanortega.plantscommerce.presentation.ui.navigation.PlantCommerceNavHost
+import com.fernanortega.plantscommerce.presentation.ui.rememberPlantCommerceAppState
 import com.fernanortega.plantscommerce.presentation.ui.theme.PlantsCommerceTheme
+import com.fernanortega.plantscommerce.utils.network.NetworkMonitorImpl
 import dagger.hilt.android.AndroidEntryPoint
 
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -28,19 +28,16 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val navController = rememberNavController()
-                    val windowSizeClass = calculateWindowSizeClass(activity = this)
+                    val appState = rememberPlantCommerceAppState(
+                        windowSizeClass = calculateWindowSizeClass(activity = this),
+                        networkMonitor = NetworkMonitorImpl(this)
+                    )
 
-                    NavHost(
-                        navController = navController,
-                        startDestination = Routes.Login.route
-                    ) {
-                        authNavGraph(
-                            navController = navController,
-                            windowSizeClass = windowSizeClass
-                        )
-
-                    }
+                    PlantCommerceNavHost(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        appState = appState
+                    )
                 }
             }
         }
