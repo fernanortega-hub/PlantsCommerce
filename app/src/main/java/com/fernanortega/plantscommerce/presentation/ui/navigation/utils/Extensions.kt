@@ -24,5 +24,5 @@ fun NavController.navigateToLogin(options: NavOptions? = null) {
 }
 
 fun NavController.navigateToRegister(options: NavOptions? = null) {
-    this.navigate(Routes.Menu.route, options)
+    this.navigate(Routes.Register.route, options)
 }

@@ -1,14 +1,34 @@
 <resources>
     <string name="app_name" translatable="false">PlantsCommerce</string>
     <string name="sign_in">Sign In</string>
-    <string name="plants">Plantas</string>
-    <string name="shopping_cart">Carrito</string>
-    <string name="profile">Perfil</string>
+    <string name="plants">Plants</string>
+    <string name="shopping_cart">Shopping Cart</string>
+    <string name="profile">Profile</string>
     <string name="password_label">Password</string>
     <string name="email_label">Email</string>
-    <string name="email_example_placeholder">example@example.com</string>
+    <string name="email_example_placeholder" translatable="false">example@example.com</string>
     <string name="password_placeholder">Password</string>
-    <string name="signing_in">Iniciando sesión</string>
+    <string name="signing_in">Signing in</string>
     <string name="not_have_an_account_label">You do not have an account?</string>
-    <string name="sign_out">Registrate</string>
+    <string name="sign_out">Sign Up</string>
+    <string name="email_must_be_not_empty_label">Enter your email</string>
+    <string name="email_must_be_valid_email_label">Invalid email</string>
+    <string name="check_your_credentials">Check your credentials</string>
+    <string name="general_error_label">Sorry, there was an unexpected error %s</string>
+    <string name="user_not_found">User not found</string>
+    <string name="password_is_required">Enter your password</string>
+    <string name="password_requires_characters">At least 8 characters required</string>
+    <string name="hide_password_toggle_label">Hide password</string>
+    <string name="show_password_toggle_label">Show password</string>
+    <string name="first_name_is_required">First name is required</string>
+    <string name="last_name_is_required">Last name is required</string>
+    <string name="check_your_data">Revisa tu información, llena todos los campos</string>
+    <string name="welcome_user">Welcome %s</string>
+    <string name="have_an_account_label">¿Ya tienes una cuenta?</string>
+    <string name="signing_up">Registrando usuario</string>
+    <string name="first_name_label">First name</string>
+    <string name="john_label">John</string>
+    <string name="last_name_label">Last name</string>
+    <string name="doe_label">Doe</string>
+    <string name="name_not_valid">Invalid name (invalid characters)</string>
 </resources>

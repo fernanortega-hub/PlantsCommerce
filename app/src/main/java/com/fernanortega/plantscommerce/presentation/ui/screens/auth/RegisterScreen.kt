@@ -10,10 +10,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.Button
@@ -32,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -44,18 +48,18 @@ import androidx.constraintlayout.compose.atMost
 import com.fernanortega.plantscommerce.R
 import com.fernanortega.plantscommerce.presentation.ui.components.RowIconTextField
 import com.fernanortega.plantscommerce.presentation.ui.theme.PlantsCommerceTheme
-import com.fernanortega.plantscommerce.presentation.ui.viewmodels.LoginEvent
-import com.fernanortega.plantscommerce.presentation.ui.viewmodels.LoginUiState
+import com.fernanortega.plantscommerce.presentation.ui.viewmodels.RegisterEvent
+import com.fernanortega.plantscommerce.presentation.ui.viewmodels.RegisterUiState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(
+fun RegisterScreen(
     modifier: Modifier = Modifier,
+    uiState: RegisterUiState,
+    onEvent: (RegisterEvent) -> Unit,
     isCompactScreen: Boolean,
     isInLandscape: Boolean,
-    uiState: LoginUiState,
-    onEvent: (LoginEvent) -> Unit,
-    onRegisterNavigate: () -> Unit
+    navigateToLogin: () -> Unit
 ) {
     ConstraintLayout(
         modifier = modifier
@@ -74,7 +78,7 @@ fun LoginScreen(
                         end.linkTo(endGuideline)
                         width = Dimension.fillToConstraints
                     } else {
-                        top.linkTo(parent.top)
+                        top.linkTo(parent.top, if (isCompactScreen) 16.dp else 32.dp)
                         start.linkTo(startGuideline)
                         end.linkTo(body.start)
                         bottom.linkTo(parent.bottom)
@@ -146,7 +150,8 @@ fun LoginScreen(
                         width = Dimension.fillToConstraints.atMost(600.dp)
                         height = Dimension.matchParent
                     }
-                },
+                }
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(
                 space = if (isCompactScreen) 12.dp else 16.dp,
                 alignment = if (isInLandscape) Alignment.CenterVertically else Alignment.Top
@@ -155,11 +160,74 @@ fun LoginScreen(
             RowIconTextField(
                 modifier = Modifier
                     .fillMaxWidth(),
-                icon = Icons.Outlined.AccountCircle,
+                icon = Icons.Outlined.Person,
+            ) {
+                Column(
+                    modifier = Modifier
+                        .weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(if (isCompactScreen) 12.dp else 16.dp)
+                ) {
+                    OutlinedTextField(
+                        value = uiState.firstName,
+                        onValueChange = { onEvent(RegisterEvent.OnFirstNameChange(it)) },
+                        isError = uiState.firstNameError != null,
+                        label = {
+                            Text(
+                                text = stringResource(id = R.string.first_name_label)
+                            )
+                        },
+                        placeholder = {
+                            Text(
+                                text = stringResource(id = R.string.john_label)
+                            )
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words, keyboardType = KeyboardType.Text),
+                        supportingText = {
+                            uiState.firstNameError?.let {
+                                Text(
+                                    text = it.asString()
+                                )
+                            }
+                        }
+                    )
+                    OutlinedTextField(
+                        value = uiState.lastName,
+                        onValueChange = { onEvent(RegisterEvent.OnLastNameChange(it)) },
+                        isError = uiState.lastNameError != null,
+                        label = {
+                            Text(
+                                text = stringResource(id = R.string.last_name_label)
+                            )
+                        },
+                        placeholder = {
+                            Text(
+                                text = stringResource(id = R.string.doe_label)
+                            )
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words, keyboardType = KeyboardType.Text),
+                        supportingText = {
+                            uiState.lastNameError?.let {
+                                Text(
+                                    text = it.asString()
+                                )
+                            }
+                        }
+                    )
+                }
+            }
+
+            RowIconTextField(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                icon = Icons.Outlined.Email
             ) {
                 OutlinedTextField(
                     value = uiState.email,
-                    onValueChange = { onEvent(LoginEvent.OnEmailChange(it)) },
+                    onValueChange = { onEvent(RegisterEvent.OnEmailChange(it)) },
                     isError = uiState.emailError != null,
                     label = {
                         Text(
@@ -172,7 +240,7 @@ fun LoginScreen(
                         )
                     },
                     modifier = Modifier
-                        .weight(1f),
+                        .fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                     supportingText = {
                         uiState.emailError?.let {
@@ -191,7 +259,7 @@ fun LoginScreen(
             ) {
                 OutlinedTextField(
                     value = uiState.password,
-                    onValueChange = { onEvent(LoginEvent.OnPasswordChange(it)) },
+                    onValueChange = { onEvent(RegisterEvent.OnPasswordChange(it)) },
                     isError = uiState.passwordError != null,
                     visualTransformation = if (uiState.togglePassword) VisualTransformation.None else PasswordVisualTransformation(),
                     label = {
@@ -208,7 +276,7 @@ fun LoginScreen(
                         .fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     trailingIcon = {
-                        IconButton(onClick = { onEvent(LoginEvent.OnTogglePassword) }) {
+                        IconButton(onClick = { onEvent(RegisterEvent.OnTogglePassword) }) {
                             Icon(
                                 imageVector = if (uiState.togglePassword) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
                                 contentDescription = stringResource(
@@ -230,7 +298,7 @@ fun LoginScreen(
             Button(
                 onClick = {
                     if (!uiState.isLoading) {
-                        onEvent(LoginEvent.OnLoginClick)
+                        onEvent(RegisterEvent.OnRegisterClick)
                     }
                 },
                 modifier = Modifier
@@ -248,8 +316,8 @@ fun LoginScreen(
                     )
                 }
                 Text(
-                    text = if (uiState.isLoading) stringResource(id = R.string.signing_in)
-                    else stringResource(id = R.string.sign_in)
+                    text = if (uiState.isLoading) stringResource(id = R.string.signing_up)
+                    else stringResource(id = R.string.sign_out)
                 )
             }
 
@@ -265,7 +333,7 @@ fun LoginScreen(
                 )
 
                 Text(
-                    text = stringResource(id = R.string.not_have_an_account_label),
+                    text = stringResource(id = R.string.have_an_account_label),
                     style = MaterialTheme.typography.labelLarge
                 )
 
@@ -276,12 +344,12 @@ fun LoginScreen(
             }
 
             OutlinedButton(
-                onClick = onRegisterNavigate,
+                onClick = navigateToLogin,
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
                 Text(
-                    text = stringResource(id = R.string.sign_out)
+                    text = stringResource(id = R.string.sign_in)
                 )
             }
         }
@@ -305,14 +373,14 @@ fun LoginScreen(
 
 @Preview(device = "spec:width=411.4dp,height=731.4dp", showSystemUi = true, showBackground = true)
 @Composable
-private fun LoginCompactPreview() {
+private fun RegisterCompactPreview() {
     PlantsCommerceTheme {
         Surface {
-            LoginScreen(
-                uiState = LoginUiState(),
+            RegisterScreen(
+                uiState = RegisterUiState(),
                 isCompactScreen = true,
                 onEvent = { /*TODO*/ },
-                onRegisterNavigate = { },
+                navigateToLogin = { },
                 isInLandscape = false,
                 modifier = Modifier
                     .fillMaxSize()
@@ -327,14 +395,14 @@ private fun LoginCompactPreview() {
     showBackground = true
 )
 @Composable
-private fun LoginCompactLandscapePreview() {
+private fun RegisterCompactLandscapePreview() {
     PlantsCommerceTheme {
         Surface {
-            LoginScreen(
-                uiState = LoginUiState(),
+            RegisterScreen(
+                uiState = RegisterUiState(),
                 isCompactScreen = true,
                 onEvent = { /*TODO*/ },
-                onRegisterNavigate = { },
+                navigateToLogin = { },
                 isInLandscape = true,
                 modifier = Modifier
                     .fillMaxSize()
@@ -345,13 +413,13 @@ private fun LoginCompactLandscapePreview() {
 
 @Preview(device = "id:pixel_c", showSystemUi = true, showBackground = true)
 @Composable
-private fun LoginMediumPreview() {
+private fun RegisterMediumPreview() {
     PlantsCommerceTheme {
         Surface {
-            LoginScreen(
-                uiState = LoginUiState(),
+            RegisterScreen(
+                uiState = RegisterUiState(),
                 onEvent = { /*TODO*/ },
-                onRegisterNavigate = { },
+                navigateToLogin = { },
                 isCompactScreen = false,
                 isInLandscape = false,
                 modifier = Modifier
@@ -363,13 +431,13 @@ private fun LoginMediumPreview() {
 
 @Preview(device = "spec:parent=pixel_c", showBackground = true, showSystemUi = true)
 @Composable
-private fun LoginLandscapeMediumPreview() {
+private fun RegisterLandscapeMediumPreview() {
     PlantsCommerceTheme {
         Surface {
-            LoginScreen(
-                uiState = LoginUiState(),
+            RegisterScreen(
+                uiState = RegisterUiState(),
                 onEvent = { /*TODO*/ },
-                onRegisterNavigate = { },
+                navigateToLogin = { },
                 isCompactScreen = false,
                 isInLandscape = true,
                 modifier = Modifier

@@ -1,10 +1,15 @@
 package com.fernanortega.plantscommerce.presentation.ui.viewmodels
 
-import android.util.Log
+import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fernanortega.plantscommerce.data.di.RetrofitModule
-import com.fernanortega.plantscommerce.data.repositories.AuthRepository
+import com.fernanortega.plantscommerce.R
+import com.fernanortega.plantscommerce.domain.model.ValidationResult
+import com.fernanortega.plantscommerce.domain.usecases.validators.EmailError
+import com.fernanortega.plantscommerce.domain.usecases.validators.EmailValidatorUseCase
+import com.fernanortega.plantscommerce.domain.usecases.LoginUseCase
+import com.fernanortega.plantscommerce.domain.usecases.validators.PasswordError
+import com.fernanortega.plantscommerce.domain.usecases.validators.PasswordValidatorUseCase
 import com.fernanortega.plantscommerce.utils.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,39 +20,125 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val loginUseCase: LoginUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState = _uiState.asStateFlow()
 
     fun onEvent(event: LoginEvent) {
-        when(event) {
+        when (event) {
             is LoginEvent.OnEmailChange -> _uiState.update { state -> state.copy(email = event.email) }
+            is LoginEvent.OnPasswordChange -> _uiState.update { state -> state.copy(password = event.password) }
+            LoginEvent.OnTogglePassword -> _uiState.update { state -> state.copy(togglePassword = !state.togglePassword) }
             LoginEvent.OnLoginClick -> {
                 viewModelScope.launch {
-                    val response = authRepository.login(_uiState.value.email, _uiState.value.password)
+                    try {
+                        _uiState.update { it.copy(isLoading = true) }
+                        _uiState.update { state ->
+                            state.copy(
+                                emailError = validateEmail(state.email),
+                                passwordError = validatePassword(state.password)
+                            )
+                        }
 
-                    Log.i("response", response.toString())
-                    Log.i("token", RetrofitModule.token)
+                        if(_uiState.value.emailError != null || _uiState.value.passwordError != null) {
+                            _uiState.update { state ->
+                                state.copy(
+                                    toast = UiText.StringResource(R.string.check_your_credentials),
+                                    isLoading = false
+                                )
+                            }
+                            return@launch
+                        }
+
+                        val response =
+                            loginUseCase.invoke(_uiState.value.email, _uiState.value.password)
+
+                        if(!response.isSuccessful || response.data == null) {
+                            _uiState.update { state ->
+                                state.copy(
+                                    toast = when(response.statusCode) {
+                                        401, 403 -> UiText.StringResource(R.string.check_your_credentials)
+                                        404 -> UiText.StringResource(R.string.user_not_found)
+                                        else -> UiText.StringResource(R.string.general_error_label, response.message)
+                                    },
+                                    isLoading = false
+                                )
+                            }
+                            return@launch
+                        }
+
+                        _uiState.update { state -> state.copy(token = response.data, isLoading = false) }
+                    } catch (ex: Exception) {
+                        _uiState.update { state ->
+                            state.copy(
+                                toast = UiText.StringResource(R.string.general_error_label, ex.message ?: ""),
+                                isLoading = false
+                            )
+                        }
+                    }
                 }
             }
-            is LoginEvent.OnPasswordChange -> _uiState.update { state -> state.copy(password = event.password) }
         }
+    }
+
+    private fun validatePassword(password: String): UiText? {
+        return when(val passwordValidator = PasswordValidatorUseCase().validate(password)) {
+            is ValidationResult.InvalidResult -> {
+                when (passwordValidator.invalidResult) {
+                    PasswordError.BLANK -> UiText.StringResource(
+                        R.string.password_is_required
+                    )
+
+                    PasswordError.LOW_CHARACTERS -> UiText.StringResource(
+                        R.string.password_requires_characters
+                    )
+                }
+            }
+
+            ValidationResult.Valid -> null
+        }
+    }
+
+    private fun validateEmail(email: String): UiText? {
+        return when(val emailValidator = EmailValidatorUseCase().validate(email)) {
+            is ValidationResult.InvalidResult -> {
+                when (emailValidator.invalidResult) {
+                    EmailError.BLANK -> UiText.StringResource(
+                        R.string.email_must_be_not_empty_label
+                    )
+
+                    EmailError.NOT_MATCHES_EMAIL -> UiText.StringResource(
+                        R.string.email_must_be_valid_email_label
+                    )
+                }
+            }
+
+            ValidationResult.Valid -> null
+        }
+    }
+
+    fun dismissToast() {
+        _uiState.update { it.copy(toast = null) }
     }
 }
 
+@Stable
 data class LoginUiState(
     val email: String = "",
     val password: String = "",
-    val emailError: Boolean = false,
-    val passwordError: Boolean = false,
-    val isUiLoading: Boolean = false,
-    val toast: UiText = UiText.UnformattedString("")
+    val emailError: UiText? = null,
+    val passwordError: UiText? = null,
+    val isLoading: Boolean = false,
+    val toast: UiText? = null,
+    val token: String = "",
+    val togglePassword: Boolean = false
 )
 
+@Stable
 sealed interface LoginEvent {
-    data class OnEmailChange(val email: String): LoginEvent
-    data class OnPasswordChange(val password: String): LoginEvent
-    object OnLoginClick: LoginEvent
-
+    data class OnEmailChange(val email: String) : LoginEvent
+    data class OnPasswordChange(val password: String) : LoginEvent
+    object OnLoginClick : LoginEvent
+    object OnTogglePassword : LoginEvent
 }

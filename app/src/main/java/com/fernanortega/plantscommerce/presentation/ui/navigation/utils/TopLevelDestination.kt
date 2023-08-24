@@ -17,10 +17,10 @@ import com.fernanortega.plantscommerce.R
  * next within a single destination will be handled directly in composables.
  */
 enum class TopLevelDestination(
-    val selectedIcon: ImageVector,
-    val unselectedIcon: ImageVector,
-    val iconTextId: Int,
-    val titleTextId: Int
+    val selectedIcon: ImageVector?,
+    val unselectedIcon: ImageVector?,
+    val iconTextId: Int?,
+    val titleTextId: Int?
 ) {
     MENU(
         selectedIcon = Icons.Rounded.ShoppingBag,
@@ -40,4 +40,10 @@ enum class TopLevelDestination(
         iconTextId = R.string.profile,
         titleTextId = R.string.profile
     ),
+    LOGIN(
+        null, null, null, null
+    ),
+    REGISTER(
+        null, null, null, null
+    )
 }

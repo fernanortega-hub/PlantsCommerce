@@ -22,7 +22,7 @@ object RetrofitModule {
         level = HttpLoggingInterceptor.Level.BODY
     }
 
-    var token = ""
+    private var token = ""
     fun setNewToken(newToken: String) {
         token = newToken
     }
