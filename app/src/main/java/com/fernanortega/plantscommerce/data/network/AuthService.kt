@@ -13,6 +13,9 @@ interface AuthService {
 
     @POST("auth/register")
     suspend fun register(@Body user: UserDto): Response<ResultHandler<UserDto?>>
+
+    @POST("auth/whoami")
+    suspend fun whoAmI(): Response<ResultHandler<UserDto?>>
 }
 
 @Serializable

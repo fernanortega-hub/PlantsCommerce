@@ -26,8 +26,10 @@
     <string name="have_an_account_label">¿Ya tienes una cuenta?</string>
     <string name="signing_up">Registrando usuario</string>
     <string name="first_name_label">First name</string>
-    <string name="john_label">John</string>
-    <string name="last_name_label">Last name</string>
-    <string name="doe_label">Doe</string>
-    <string name="name_not_valid">Invalid name (invalid characters)</string>
+    <string name="john_label">Juan</string>
+    <string name="last_name_label">Apellido</string>
+    <string name="doe_label">Perez</string>
+    <string name="name_not_valid">Nombre inválido (caracteres inválidos)</string>
+    <string name="not_connected">No estás conectado a internet</string>
+    <string name="session_expired">Sesión expirada, inicia sesión nuevamente</string>
 </resources>

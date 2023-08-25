@@ -9,4 +9,8 @@ sealed class Routes(val route: String) {
     object ShoppingCart: Routes("shopping_cart")
     object Profile: Routes("profile")
     object Search: Routes("search")
+    object Commerce: Routes("commerce_main_route")
+
+    companion object {
+    }
 }

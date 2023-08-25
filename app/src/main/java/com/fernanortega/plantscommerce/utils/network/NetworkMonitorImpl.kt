@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.conflate
 import javax.inject.Inject
+import javax.inject.Singleton
 
 class NetworkMonitorImpl @Inject constructor(
     @ApplicationContext private val context: Context
@@ -46,7 +47,7 @@ class NetworkMonitorImpl @Inject constructor(
 
         connectivityManager.registerNetworkCallback(request, callback)
 
-        channel.trySend(connectivityManager.activeNetwork != null)
+        channel.trySend(connectivityManager.isCurrentlyConnected())
 
         awaitClose {
             connectivityManager.unregisterNetworkCallback(callback)
@@ -54,7 +55,7 @@ class NetworkMonitorImpl @Inject constructor(
     }
         .conflate()
 
-//    private fun ConnectivityManager.isCurrentlyConnected() = activeNetwork
-//        ?.let(::getNetworkCapabilities)
-//        ?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ?: false
+    private fun ConnectivityManager.isCurrentlyConnected() = activeNetwork
+        ?.let(::getNetworkCapabilities)
+        ?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ?: false
 }

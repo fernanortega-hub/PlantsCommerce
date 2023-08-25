@@ -13,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.time.Duration
 import javax.inject.Singleton
 
-private const val BASE_URL = "https://plants-commerce-api.onrender.com/api/v1/"
+private const val BASE_URL = "http://10.0.2.2:52907/api/v1/"
 
 @Module
 @InstallIn(SingletonComponent::class)

@@ -7,6 +7,7 @@ import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.ShoppingBag
 import androidx.compose.material.icons.rounded.ShoppingCart
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.fernanortega.plantscommerce.R
 
@@ -16,6 +17,7 @@ import com.fernanortega.plantscommerce.R
  * can contain one or more screens (based on the window size). Navigation from one screen to the
  * next within a single destination will be handled directly in composables.
  */
+@Immutable
 enum class TopLevelDestination(
     val selectedIcon: ImageVector?,
     val unselectedIcon: ImageVector?,

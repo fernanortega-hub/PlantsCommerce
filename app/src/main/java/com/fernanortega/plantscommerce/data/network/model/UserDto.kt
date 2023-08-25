@@ -1,5 +1,6 @@
 package com.fernanortega.plantscommerce.data.network.model
 
+import com.fernanortega.plantscommerce.data.local.model.UserEntity
 import com.fernanortega.plantscommerce.domain.model.User
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -7,6 +8,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class UserDto(
+    @SerialName("_id")
+    val _id: String = "",
     @SerialName("email")
     val email: String = "",
     @SerialName("firstName")
@@ -20,9 +23,19 @@ data class UserDto(
 ) {
     fun toDomain(): User =
         User(
+            _id = _id,
             email = email,
             firstName = firstName,
             lastName = lastName,
             role = role ?: "user"
+        )
+    fun toEntity(): UserEntity =
+        UserEntity(
+            _id = _id,
+            email = email,
+            firstName = firstName,
+            lastName = lastName,
+            role = role ?: "user",
+            password = password ?: ""
         )
 }

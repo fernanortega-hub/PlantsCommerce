@@ -31,4 +31,6 @@
     <string name="last_name_label">Last name</string>
     <string name="doe_label">Doe</string>
     <string name="name_not_valid">Invalid name (invalid characters)</string>
+    <string name="not_connected">You are not connected to the internet</string>
+    <string name="session_expired">Sesión expirada, inicia sesión nuevamente</string>
 </resources>
