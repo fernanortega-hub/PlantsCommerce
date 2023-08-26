@@ -2,6 +2,8 @@ package com.fernanortega.plantscommerce.data.local.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.fernanortega.plantscommerce.domain.model.Product
+import com.fernanortega.plantscommerce.domain.model.User
 import java.time.LocalDateTime
 
 @Entity(tableName = "product_table")

@@ -95,11 +95,11 @@ class PlantsCommerceState(
         }
     }
 
-    private val isUserLogin: Boolean
+    private val isUserLogged: Boolean
         get() = sharedPreferences.contains(Constants.TOKEN_KEY)
 
     val startDestination: String
-        get() = if(isUserLogin) Routes.Menu.route else Routes.Login.route
+        get() = if(isUserLogged) Routes.Menu.route else Routes.Login.route
 
     val currentDestination: NavDestination?
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination
@@ -115,10 +115,10 @@ class PlantsCommerceState(
     val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.values().asList().filter { it.iconTextId != null }
 
     val shouldShowBottomBar: Boolean
-        get() = isUserLogin && windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
+        get() = isUserLogged && windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
 
     val shouldShowNavRail: Boolean
-        get() = isUserLogin && !shouldShowBottomBar
+        get() = isUserLogged && !shouldShowBottomBar
 
     val isOffline: StateFlow<Boolean> = networkMonitor.isOnline
         .map(Boolean::not)

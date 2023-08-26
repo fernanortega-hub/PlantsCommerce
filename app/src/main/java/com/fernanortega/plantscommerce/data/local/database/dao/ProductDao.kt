@@ -31,6 +31,6 @@ interface ProductDao {
     """)
     fun getProductsByCategory(categoryId: String): Flow<List<PopulatedProduct>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertProductCrossRefEntities(products: List<ProductCrossRef>)
 }

@@ -33,11 +33,9 @@ fun NavGraphBuilder.authNavGraph(
         val uiState by viewModel.uiState.collectAsStateWithLifecycle()
         val context = LocalContext.current
 
-        LaunchedEffect(uiState.token) {
-            if(uiState.token.isNotBlank()) {
-                appState.setToken(uiState.token)
-                appState.navigateToTopLevelDestination(TopLevelDestination.MENU)
-            }
+        if(uiState.token.isNotBlank()) {
+            appState.setToken(uiState.token)
+            appState.navigateToTopLevelDestination(TopLevelDestination.MENU)
         }
 
         LaunchedEffect(uiState.toast) {

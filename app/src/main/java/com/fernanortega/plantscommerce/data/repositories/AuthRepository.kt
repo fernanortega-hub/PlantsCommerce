@@ -2,8 +2,8 @@ package com.fernanortega.plantscommerce.data.repositories
 
 import com.fernanortega.plantscommerce.data.di.IoDispatcher
 import com.fernanortega.plantscommerce.data.local.database.dao.UserDao
-import com.fernanortega.plantscommerce.data.network.AuthService
-import com.fernanortega.plantscommerce.data.network.LoginRequest
+import com.fernanortega.plantscommerce.data.network.services.AuthService
+import com.fernanortega.plantscommerce.data.network.services.LoginRequest
 import com.fernanortega.plantscommerce.domain.model.User
 import com.fernanortega.plantscommerce.utils.ResultHandler
 import com.fernanortega.plantscommerce.utils.fromJson

@@ -16,20 +16,17 @@ import androidx.room.Index
         ForeignKey(
             entity = ProductEntity::class,
             parentColumns = ["_id"],
-            childColumns = ["product_id"],
-            onDelete = ForeignKey.CASCADE
+            childColumns = ["product_id"]
         ),
         ForeignKey(
             entity = CategoryEntity::class,
             parentColumns = ["_id"],
-            childColumns = ["category_id"],
-            onDelete = ForeignKey.CASCADE
+            childColumns = ["category_id"]
         ),
         ForeignKey(
             entity = UserEntity::class,
             parentColumns = ["_id"],
-            childColumns = ["user_id"],
-            onDelete = ForeignKey.CASCADE
+            childColumns = ["user_id"]
         ),
     ],
     indices = [

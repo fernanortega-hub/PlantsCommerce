@@ -1,6 +1,7 @@
 package com.fernanortega.plantscommerce.data.di
 
-import com.fernanortega.plantscommerce.data.network.AuthService
+import com.fernanortega.plantscommerce.data.network.services.AuthService
+import com.fernanortega.plantscommerce.data.network.services.ProductService
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -10,10 +11,11 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 import java.time.Duration
 import javax.inject.Singleton
 
-private const val BASE_URL = "http://10.0.2.2:52907/api/v1/"
+private const val BASE_URL = "http://10.0.2.2:56441/api/v1/"
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -52,9 +54,10 @@ object RetrofitModule {
     @Singleton
     fun providesRetrofit(
         httpClient: OkHttpClient
-    ): Retrofit = Retrofit.Builder().baseUrl(BASE_URL)
+    ): Retrofit = Retrofit.Builder()
+        .baseUrl(BASE_URL)
         .client(httpClient)
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create(provideGson()))
         .build()
 
     @Provides
@@ -62,4 +65,10 @@ object RetrofitModule {
     fun providesAuthService(
         retrofit: Retrofit
     ): AuthService = retrofit.create(AuthService::class.java)
+
+    @Provides
+    @Singleton
+    fun providesProductService(
+        retrofit: Retrofit
+    ): ProductService = retrofit.create(ProductService::class.java)
 }

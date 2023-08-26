@@ -1,4 +1,4 @@
-package com.fernanortega.plantscommerce.data.network
+package com.fernanortega.plantscommerce.data.network.services
 
 import com.fernanortega.plantscommerce.data.network.model.UserDto
 import com.fernanortega.plantscommerce.utils.ResultHandler

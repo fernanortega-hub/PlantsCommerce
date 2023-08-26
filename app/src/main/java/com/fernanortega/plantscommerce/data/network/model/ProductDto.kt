@@ -1,5 +1,8 @@
 package com.fernanortega.plantscommerce.data.network.model
 
+import com.fernanortega.plantscommerce.data.local.model.ProductCrossRef
+import com.fernanortega.plantscommerce.data.local.model.ProductEntity
+import com.fernanortega.plantscommerce.domain.model.Product
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -13,7 +16,7 @@ data class ProductDto(
     @SerialName("description")
     val description: String = "",
     @SerialName("_id")
-    val id: String = "",
+    val _id: String = "",
     @SerialName("name")
     val name: String = "",
     @SerialName("price")
@@ -23,5 +26,37 @@ data class ProductDto(
     @SerialName("updatedAt")
     val updatedAt: String = "",
     @SerialName("user")
-    val user: UserDto = UserDto(),
-)
+    val user: UserDto = UserDto()
+) {
+    fun toCrossReferences(): List<ProductCrossRef> = categories.map { category ->
+        ProductCrossRef(
+            productId = _id,
+            categoryId = category._id,
+            userId = user._id
+        )
+    }
+
+    fun toDomain(): Product = Product(
+        _id = _id,
+        categories = categories.map { it.toDomain() },
+        createdAt = createdAt,
+        description = description,
+        name = name,
+        price = price,
+        stock = stock,
+        updatedAt = updatedAt,
+        user = user.toDomain(),
+    )
+
+    fun toEntity(): ProductEntity = ProductEntity(
+        _id = _id,
+        name = name,
+        stock = stock,
+        imageUrl = "",
+        price = price,
+        description = description,
+        createdAt = createdAt,
+        updatedAt = updatedAt
+
+    )
+}
