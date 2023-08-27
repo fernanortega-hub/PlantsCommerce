@@ -1,12 +1,15 @@
 package com.fernanortega.plantscommerce.presentation
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -26,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.fernanortega.plantscommerce.R
 import com.fernanortega.plantscommerce.presentation.ui.components.PlantsCommerceBottomAppBar
+import com.fernanortega.plantscommerce.presentation.ui.components.PlantsCommerceRail
 import com.fernanortega.plantscommerce.presentation.ui.navigation.PlantCommerceNavHost
 import com.fernanortega.plantscommerce.presentation.ui.rememberPlantCommerceAppState
 import com.fernanortega.plantscommerce.presentation.ui.theme.PlantsCommerceTheme
@@ -33,7 +37,7 @@ import com.fernanortega.plantscommerce.utils.network.NetworkMonitor
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class, ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
@@ -61,7 +65,6 @@ class MainActivity : ComponentActivity() {
                     val noConnectedMessage = stringResource(id = R.string.not_connected)
 
                     LaunchedEffect(isOffline) {
-                        Log.i("isOffline", isOffline.toString())
                         if(isOffline) {
                             snackBarState.showSnackbar(
                                 message = noConnectedMessage,
@@ -93,13 +96,28 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                     ) { innerPadding ->
-                        PlantCommerceNavHost(
+                        Row(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(innerPadding),
-                            appState = appState,
-                            startDestination = appState.startDestination
-                        )
+                                .padding(innerPadding)
+                                .consumeWindowInsets(innerPadding)
+                        ) {
+                            if(appState.shouldShowNavRail) {
+                                PlantsCommerceRail(
+                                    destinations = appState.topLevelDestinations,
+                                    onNavigateToDestination = appState::navigateToTopLevelDestination,
+                                    currentDestination = appState.currentDestination,
+                                    modifier = Modifier
+                                        .safeDrawingPadding()
+                                )
+                            }
+                            PlantCommerceNavHost(
+                                appState = appState,
+                                modifier = Modifier
+                                    .weight(1f),
+                                startDestination = appState.startDestination
+                            )
+                        }
                     }
 
                 }

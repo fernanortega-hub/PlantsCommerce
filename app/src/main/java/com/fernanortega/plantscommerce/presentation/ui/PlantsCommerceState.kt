@@ -99,23 +99,26 @@ class PlantsCommerceState(
         get() = sharedPreferences.contains(Constants.TOKEN_KEY)
 
     val startDestination: String
-        get() = if(isUserLogged) Routes.Menu.route else Routes.Login.route
+        get() = if(isUserLogged) Routes.Shop.route else Routes.Login.route
 
     val currentDestination: NavDestination?
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination
 
     val currentTopLevelDestination: TopLevelDestination?
         @Composable get() = when(currentDestination?.route) {
-            Routes.Menu.route -> TopLevelDestination.MENU
+            Routes.Shop.route -> TopLevelDestination.SHOP
             Routes.ShoppingCart.route -> TopLevelDestination.SHOPPING_CART
             Routes.Profile.route -> TopLevelDestination.PROFILE
             else -> null
         }
 
-    val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.values().asList().filter { it.iconTextId != null }
+    val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.values().asList().filter { it.iconTextId != null && it.selectedIcon != null && it.unselectedIcon != null && it.titleTextId != null }
 
     val shouldShowBottomBar: Boolean
         get() = isUserLogged && windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
+
+    val shouldShowTopAppBar: Boolean
+        @Composable get() = currentDestination?.route?.contains(Routes.ProductDetails.route) == true
 
     val shouldShowNavRail: Boolean
         get() = isUserLogged && !shouldShowBottomBar
@@ -130,6 +133,7 @@ class PlantsCommerceState(
 
     val isInLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
+
     fun navigateToTopLevelDestination(topLevelDestination: TopLevelDestination) {
         val topLevelNavOptions = navOptions {
             // Pop up to the start destination of the graph to
@@ -137,7 +141,7 @@ class PlantsCommerceState(
             // on the back stack as users select items
             popUpTo(navController.graph.findStartDestination().id) {
                 saveState = true
-                if(topLevelDestination == TopLevelDestination.LOGIN || topLevelDestination == TopLevelDestination.MENU) {
+                if(topLevelDestination == TopLevelDestination.LOGIN || topLevelDestination == TopLevelDestination.SHOP) {
                     inclusive = true
                 }
             }
@@ -151,7 +155,7 @@ class PlantsCommerceState(
         }
 
         when(topLevelDestination) {
-            TopLevelDestination.MENU -> navController.navigateToMenu(topLevelNavOptions)
+            TopLevelDestination.SHOP -> navController.navigateToMenu(topLevelNavOptions)
             TopLevelDestination.SHOPPING_CART -> navController.navigateToShoppingCart(topLevelNavOptions)
             TopLevelDestination.PROFILE -> navController.navigateToProfile(topLevelNavOptions)
             TopLevelDestination.LOGIN -> navController.navigateToLogin(topLevelNavOptions)

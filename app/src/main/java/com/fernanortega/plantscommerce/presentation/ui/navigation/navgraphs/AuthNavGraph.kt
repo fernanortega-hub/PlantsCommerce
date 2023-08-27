@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.fernanortega.plantscommerce.presentation.ui.PlantsCommerceState
@@ -21,7 +20,6 @@ import com.fernanortega.plantscommerce.presentation.ui.viewmodels.LoginViewModel
 import com.fernanortega.plantscommerce.presentation.ui.viewmodels.RegisterViewModel
 
 fun NavGraphBuilder.authNavGraph(
-    navController: NavController,
     appState: PlantsCommerceState
 ) {
     val windowSizeClass = appState.windowSizeClass
@@ -35,7 +33,7 @@ fun NavGraphBuilder.authNavGraph(
 
         if(uiState.token.isNotBlank()) {
             appState.setToken(uiState.token)
-            appState.navigateToTopLevelDestination(TopLevelDestination.MENU)
+            appState.navigateToTopLevelDestination(TopLevelDestination.SHOP)
         }
 
         LaunchedEffect(uiState.toast) {

@@ -71,22 +71,8 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    suspend fun whoAmI(_id: String? = null): ResultHandler<User?> = withContext(dispatcher) {
+    suspend fun whoAmI(): ResultHandler<User?> = withContext(dispatcher) {
         try {
-            if(!_id.isNullOrBlank()) {
-                val user = userDao.getById(id = _id)
-
-                if(user != null) {
-                    return@withContext ResultHandler(
-                        isSuccessful = true,
-                        data = user.toDomain(),
-                        statusCode = 200,
-                        status = "Success",
-                        message = "User founded"
-                    )
-                }
-            }
-
             val response = authService.whoAmI()
 
             if (!response.isSuccessful) {

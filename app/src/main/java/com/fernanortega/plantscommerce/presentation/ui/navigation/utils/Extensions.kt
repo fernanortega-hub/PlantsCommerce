@@ -4,7 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 
 fun NavController.navigateToMenu(options: NavOptions? = null) {
-    this.navigate(Routes.Menu.route, options)
+    this.navigate(Routes.Shop.route, options)
 }
 
 fun NavController.navigateToShoppingCart(options: NavOptions? = null) {

@@ -15,7 +15,7 @@ import retrofit2.create
 import java.time.Duration
 import javax.inject.Singleton
 
-private const val BASE_URL = "http://10.0.2.2:56441/api/v1/"
+private const val BASE_URL = "http://10.0.2.2:50829/api/v1/"
 
 @Module
 @InstallIn(SingletonComponent::class)

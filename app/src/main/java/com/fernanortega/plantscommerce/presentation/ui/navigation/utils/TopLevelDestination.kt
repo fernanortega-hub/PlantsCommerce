@@ -24,7 +24,7 @@ enum class TopLevelDestination(
     val iconTextId: Int?,
     val titleTextId: Int?
 ) {
-    MENU(
+    SHOP(
         selectedIcon = Icons.Rounded.ShoppingBag,
         unselectedIcon = Icons.Outlined.ShoppingBag,
         iconTextId = R.string.plants,

@@ -26,7 +26,7 @@ class ProductRepository @Inject constructor(
     suspend fun getProducts(limit: Int = 10): ResultHandler<List<Product>?> =
         withContext(ioDispatcher) {
             return@withContext try {
-                val response = productService.getProducts()
+                val response = productService.getProducts(limit)
 
                 if (response.isSuccessful) {
                     val body = response.body()!!
@@ -71,6 +71,41 @@ class ProductRepository @Inject constructor(
 
             productDao.insertProductCrossRefEntities(
                 productDto.toCrossReferences()
+            )
+        }
+    }
+
+    suspend fun getProductById(productId: String): ResultHandler<Product?> = withContext(ioDispatcher) {
+        return@withContext  try {
+            val response = productService.getProductById(productId)
+
+            if(!response.isSuccessful) {
+                val errorRes = Gson().fromJson<ResultHandler<ProductDto?>>(response.errorBody()!!.string())
+
+                ResultHandler(
+                    isSuccessful = false,
+                    data = null,
+                    statusCode = errorRes.statusCode,
+                    status = errorRes.status,
+                    message = errorRes.message
+                )
+            } else {
+                val result = response.body()!!
+                ResultHandler(
+                    isSuccessful = true,
+                    data = result.data!!.toDomain(),
+                    statusCode = result.statusCode,
+                    status = result.status,
+                    message = result.message
+                )
+            }
+        } catch (ex: Exception) {
+            ResultHandler(
+                isSuccessful = false,
+                data = null,
+                statusCode = 500,
+                status = ex.cause?.localizedMessage ?: "",
+                message = ex.cause?.message ?: ""
             )
         }
     }

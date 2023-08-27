@@ -1,8 +1,8 @@
 package com.fernanortega.plantscommerce.presentation.ui.components
 
 import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationRail
+import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,29 +15,29 @@ import com.fernanortega.plantscommerce.presentation.ui.theme.PlantsCommerceTheme
 import com.fernanortega.plantscommerce.utils.isTopLevelDestinationInHierarchy
 
 @Composable
-fun PlantsCommerceBottomAppBar(
-    modifier: Modifier = Modifier,
+fun PlantsCommerceRail(
     destinations: List<TopLevelDestination>,
     onNavigateToDestination: (TopLevelDestination) -> Unit,
     currentDestination: NavDestination?,
+    modifier: Modifier = Modifier
 ) {
-    NavigationBar(
+    NavigationRail(
         modifier = modifier
     ) {
-        destinations.forEach { topLevelDestination ->
-            val selected = currentDestination.isTopLevelDestinationInHierarchy(topLevelDestination)
-            NavigationBarItem(
+        destinations.forEach { destination ->
+            val selected = currentDestination.isTopLevelDestinationInHierarchy(destination)
+            NavigationRailItem(
                 selected = selected,
-                onClick = { onNavigateToDestination(topLevelDestination) },
+                onClick = { onNavigateToDestination(destination) },
                 icon = {
                     Icon(
-                        imageVector =  if(!selected) topLevelDestination.unselectedIcon!! else topLevelDestination.selectedIcon!!,
+                        imageVector = if(selected) destination.selectedIcon!! else destination.unselectedIcon!!,
                         contentDescription = null
                     )
                 },
                 label = {
                     Text(
-                        text = stringResource(id = topLevelDestination.iconTextId!!)
+                        text = stringResource(id = destination.iconTextId!!)
                     )
                 },
                 alwaysShowLabel = false
@@ -46,12 +46,11 @@ fun PlantsCommerceBottomAppBar(
     }
 }
 
-
 @Preview
 @Composable
-fun PlantsCommerceBottomPreview() {
+fun PlantsCommerceRailPreview() {
     PlantsCommerceTheme {
-        PlantsCommerceBottomAppBar(
+        PlantsCommerceRail(
             destinations = listOf(TopLevelDestination.SHOP, TopLevelDestination.PROFILE, TopLevelDestination.SHOPPING_CART),
             onNavigateToDestination = {  },
             currentDestination = NavDestination(

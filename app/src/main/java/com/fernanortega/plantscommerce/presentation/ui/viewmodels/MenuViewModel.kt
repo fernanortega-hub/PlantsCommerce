@@ -33,9 +33,7 @@ class MenuViewModel @Inject constructor(
 
     private fun whoAmI() {
         viewModelScope.launch {
-            val userId = sharedPreferences.getString(Constants.USER_ID_KEY, null)
-
-            val response = whoAmIUseCase.invoke(userId)
+            val response = whoAmIUseCase.invoke()
 
             if (!response.isSuccessful || response.data == null) {
                 _uiState.update { state ->

@@ -61,7 +61,7 @@ val Typography = Typography(
     ),
     headlineSmall = TextStyle(
         fontFamily = ibmPlexSerifFamily,
-        fontWeight = FontWeight.Normal,
+        fontWeight = FontWeight.Medium,
         fontSize = 24.sp,
         lineHeight = 32.sp,
         letterSpacing = 0.sp
@@ -77,7 +77,7 @@ val Typography = Typography(
     ),
     titleMedium = TextStyle(
         fontFamily = ibmPlexSansFamily,
-        fontWeight = FontWeight.Normal,
+        fontWeight = FontWeight.Medium,
         fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.15.sp

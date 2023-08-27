@@ -15,6 +15,7 @@ data class Product(
     val name: String = "",
     val price: Double = 0.0,
     val stock: Int = 0,
+    val imageUrl: String = "",
     val updatedAt: String = "",
     val user: User = User()
 ) {
@@ -27,6 +28,7 @@ data class Product(
         price = price,
         stock = stock,
         updatedAt = updatedAt,
+        imageUrl = imageUrl,
         user = user.toDto()
     )
 

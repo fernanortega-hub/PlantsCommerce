@@ -22,15 +22,22 @@
     <string name="show_password_toggle_label">Show password</string>
     <string name="first_name_is_required">First name is required</string>
     <string name="last_name_is_required">Last name is required</string>
-    <string name="check_your_data">Revisa tu información, llena todos los campos</string>
+    <string name="check_your_data">Check your data, fill in all the fields</string>
     <string name="welcome_user">Welcome %s</string>
-    <string name="have_an_account_label">¿Ya tienes una cuenta?</string>
-    <string name="signing_up">Registrando usuario</string>
+    <string name="have_an_account_label">Do you already have an account?</string>
+    <string name="signing_up">Signing up</string>
     <string name="first_name_label">First name</string>
     <string name="john_label">John</string>
     <string name="last_name_label">Last name</string>
     <string name="doe_label">Doe</string>
     <string name="name_not_valid">Invalid name (invalid characters)</string>
     <string name="not_connected">You are not connected to the internet</string>
-    <string name="session_expired">Sesión expirada, inicia sesión nuevamente</string>
+    <string name="session_expired">Session expired, please log in again</string>
+    <string name="what_you_want_to_do_label">What do you want to do?</string>
+    <string name="image_of_description">Image of 1%s, 2%s</string>
+    <string name="in_stock_label">In Stock - %d</string>
+    <string name="no_stock_label">No Stock</string>
+    <string name="back_to_previous_screen_label">Return to previous screen</string>
+    <string name="product_not_found">Plant not found</string>
+    <string name="product_details_label">Plant details</string>
 </resources>

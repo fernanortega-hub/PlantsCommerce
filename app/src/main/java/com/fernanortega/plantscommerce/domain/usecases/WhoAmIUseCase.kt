@@ -10,6 +10,6 @@ import javax.inject.Singleton
 class WhoAmIUseCase @Inject constructor(
     private val authRepository: AuthRepository
 ) {
-    suspend operator fun invoke(_id: String?): ResultHandler<User?> =
-        authRepository.whoAmI(_id)
+    suspend operator fun invoke(): ResultHandler<User?> =
+        authRepository.whoAmI()
 }

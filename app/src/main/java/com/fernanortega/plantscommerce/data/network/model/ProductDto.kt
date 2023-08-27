@@ -26,7 +26,9 @@ data class ProductDto(
     @SerialName("updatedAt")
     val updatedAt: String = "",
     @SerialName("user")
-    val user: UserDto = UserDto()
+    val user: UserDto = UserDto(),
+    @SerialName("imageUrl")
+    val imageUrl: String = ""
 ) {
     fun toCrossReferences(): List<ProductCrossRef> = categories.map { category ->
         ProductCrossRef(
@@ -46,17 +48,17 @@ data class ProductDto(
         stock = stock,
         updatedAt = updatedAt,
         user = user.toDomain(),
+        imageUrl = imageUrl
     )
 
     fun toEntity(): ProductEntity = ProductEntity(
         _id = _id,
         name = name,
         stock = stock,
-        imageUrl = "",
+        imageUrl = imageUrl,
         price = price,
         description = description,
         createdAt = createdAt,
         updatedAt = updatedAt
-
     )
 }
